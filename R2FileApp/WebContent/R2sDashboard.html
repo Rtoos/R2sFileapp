@@ -52,7 +52,7 @@
 		  jsonData["root_service"] = rootid;
 		  jsonData["type"] = "jsontree";
 
-	  let response  = await fetch("http://R2stestapp-env.eba-txcmd3gh.us-east-2.elasticbeanstalk.com/R2s.html", {
+	  let response  = await fetch("http://R2sfileapp-env.eba-pypyzd6h.us-east-2.elasticbeanstalk.com/R2s.html", {
 	        headers: {
 	            'Content-Type': 'application/json'
 	          },
@@ -86,7 +86,7 @@ async function onretry() {
 	jsonData["service"] = serviceid;
 	jsonData["type"] = "retry";
 
-    let response  = await fetch("http://R2stestapp-env.eba-txcmd3gh.us-east-2.elasticbeanstalk.com/R2s.html", {
+    let response  = await fetch("http://R2sfileapp-env.eba-pypyzd6h.us-east-2.elasticbeanstalk.com/R2s.html", {
       headers: {
           'Content-Type': 'application/json'
         },

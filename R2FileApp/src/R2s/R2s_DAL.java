@@ -44,16 +44,6 @@ public class R2s_DAL {
 
 	
 	static public void create() {
-		/*		
-		r2scluster = Cluster.builder()
-				.addContactPoint("cassandra.us-east-2.amazonaws.com")
-				.withPort(9142)
-				.withAuthProvider(new SigV4AuthProvider("us-east-2"))
-                .withSSL()
-				.withCredentials("rtoos-at-061466880193", "cNG6qoaLFn8w+6GYDhehcKWektKA5NKTA5SNVj4JgMg=")
-				.build();
-	    System.out.println("Cluster Create ");
-*/
 		try {
 			
 			ClassLoader classLoader = Thread.currentThread().getContextClassLoader();         
@@ -72,7 +62,7 @@ public class R2s_DAL {
 			for (int length; (length = stream.read(buffer)) != -1; ) {
 			     result.write(buffer, 0, length);
 			}
-		    //stream.close();
+			//stream.close();
 			// StandardCharsets.UTF_8.name() > JDK 7
 			JSONObject r2sconifg =  new JSONObject(result.toString("UTF-8"));
 			CASSANDRA_URL = r2sconifg.getString("CASSANDRA_URL");
@@ -151,6 +141,7 @@ public class R2s_DAL {
 		stquery += rootid;
 		Statement  st = new SimpleStatement(stquery);
 	    st.setConsistencyLevel(ConsistencyLevel.LOCAL_QUORUM);
+		if (r2scluster== null || r2scluster.isClosed()) create();		
 	    ResultSet resultSet = session2.execute(st);
 	    List<Row> all = resultSet.all();
 	    for (int i = 0; i < all.size(); i++)
@@ -183,6 +174,7 @@ public class R2s_DAL {
 		stquery += rootid;
 		Statement  st = new SimpleStatement(stquery);
 	    st.setConsistencyLevel(ConsistencyLevel.LOCAL_QUORUM);
+		if (r2scluster== null || r2scluster.isClosed()) create();		
 		ResultSet resultSet = session2.execute(st);
 		List<Row> all = resultSet.all();
 	    for (int i = 0; i < all.size(); i++)
@@ -264,6 +256,7 @@ public class R2s_DAL {
 //		String stquery = "select distinct root_service from rtoos.service_tree";
 		Statement  st = new SimpleStatement(stquery);
 	    st.setConsistencyLevel(ConsistencyLevel.LOCAL_QUORUM);
+		if (r2scluster== null || r2scluster.isClosed()) create();		
 		ResultSet resultSet = session2.execute(st);
 		List<Row> all = resultSet.all();
 	    //System.out.println(all.size());
@@ -281,6 +274,7 @@ public class R2s_DAL {
 				String stquery2 = "select JSON * from rtoos.service_tree where root_service = " + jsonstr + " and create_date = '" + rootdate + "' and service = " + jsonstr;
 				Statement  st2 = new SimpleStatement(stquery2);
 				st2.setConsistencyLevel(ConsistencyLevel.LOCAL_QUORUM);
+				if (r2scluster== null || r2scluster.isClosed()) create();		
 				ResultSet resultSet2 = session2.execute(st2);
 				List<Row> all2 = resultSet2.all();
 				if (all2 != null) {
@@ -367,6 +361,7 @@ public class R2s_DAL {
 		//System.out.println(stquery);	  
 		Statement  st2 = new SimpleStatement(stquery);
 		st2.setConsistencyLevel(ConsistencyLevel.LOCAL_QUORUM);
+		if (r2scluster== null || r2scluster.isClosed()) create();		
 		ResultSet resultSet3 = session2.execute(st2);
 		return resultSet3.wasApplied();
 		
@@ -379,6 +374,7 @@ public class R2s_DAL {
 		  st.setConsistencyLevel(ConsistencyLevel.LOCAL_QUORUM);
 
 		//System.out.println(st);
+		if (r2scluster== null || r2scluster.isClosed()) create();		
 		session2.execute(st);
 				
 	    String service = jsonobj.getString("service");
@@ -441,6 +437,7 @@ public class R2s_DAL {
 		String jsonquery = "INSERT INTO blocked_list JSON '" + blockedrow.toString() +"'";
 		Statement  st = new SimpleStatement(jsonquery);
 	    st.setConsistencyLevel(ConsistencyLevel.LOCAL_QUORUM);
+		if (r2scluster== null || r2scluster.isClosed()) create();		
 		session2.execute(st);
 		
 	    String pre_service = blockedrow.getString("pre_service");
@@ -491,6 +488,7 @@ public class R2s_DAL {
 	
 	public String DoClean()
 	{
+		if (r2scluster== null || r2scluster.isClosed()) create();		
 	      session2.execute("TRUNCATE service_tree;");
 	      session2.execute("TRUNCATE blocked_list;");
 		  id_to_row.clear();

@@ -26,12 +26,29 @@ import R2sLib.R2sLib;
 import software.aws.mcs.auth.SigV4AuthProvider;
 
 /**
- * Servlet implementation class R2FileAPI
+ * Servlet implementation class R2FileAPIDBConnect()
  */
 @WebServlet("/FileAPI")
 public class FileAPI extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	public static Cluster cluster;
+	
+	public static String FILEAPPURL = "http://R2sclient-env.eba-hnmjtifd.us-east-2.elasticbeanstalk.com";
+	public static Cluster cluster = null;
+	public static void DBConnect() {
+		if (FileAPI.cluster== null || FileAPI.cluster.isClosed())
+		{
+    	FileAPI.cluster = Cluster.builder()
+				.addContactPoint("cassandra.us-east-2.amazonaws.com")
+				.withPort(9142)
+				.withAuthProvider(new SigV4AuthProvider("us-east-2"))
+                .withSSL()
+				.withCredentials("rtoos-at-061466880193", "cNG6qoaLFn8w+6GYDhehcKWektKA5NKTA5SNVj4JgMg=")
+				.build();
+	    System.out.println("Cluster Create ");	
+		}
+	    return;	
+	}
+	
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -42,16 +59,10 @@ public class FileAPI extends HttpServlet {
     }
 
     public void init(ServletConfig config) throws ServletException {
-		  //FileAPI.cluster = Cluster.builder().addContactPoint("127.0.0.1").build();
+		 //FileAPI.cluster = Cluster.builder().addContactPoint("127.0.0.1").build();
+    	DBConnect();
     	
-    	FileAPI.cluster = Cluster.builder()
-				.addContactPoint("cassandra.us-east-2.amazonaws.com")
-				.withPort(9142)
-				.withAuthProvider(new SigV4AuthProvider("us-east-2"))
-                .withSSL()
-				.withCredentials("rtoos-at-061466880193", "cNG6qoaLFn8w+6GYDhehcKWektKA5NKTA5SNVj4JgMg=")
-				.build();
-	    System.out.println("Cluster Create ");
+
 	    
     }
     
@@ -93,7 +104,8 @@ public class FileAPI extends HttpServlet {
 			  //Timestamp timestamp = new Timestamp(System.currentTimeMillis());		  
 			  // data coming in in filename
 			  // put to file (in cassandra)
-				  Session session = FileAPI.cluster.connect();
+			  FileAPI.DBConnect();
+			  Session session =  FileAPI.cluster.connect();
 				  session.execute("USE testapp");
 			      Statement  st2 = new SimpleStatement("INSERT INTO files (file_id, file) VALUES (?, ?);", 
 							UUID.fromString(rootid), FileName);
@@ -114,7 +126,7 @@ public class FileAPI extends HttpServlet {
 		      //cluster.close();
 
 			  // get the value
-			  resp = r2lib.R2s_Root(rootid, "http://R2stestapp-env.eba-txcmd3gh.us-east-2.elasticbeanstalk.com/FileImportController.html", jsonObject.toString() );
+			  resp = r2lib.R2s_Root(rootid, FileAPI.FILEAPPURL + "/FileImportController.html", jsonObject.toString() );
 			  
 		  } 
 		  catch (JSONException e) 

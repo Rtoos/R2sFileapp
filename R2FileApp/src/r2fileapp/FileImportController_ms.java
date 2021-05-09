@@ -94,7 +94,8 @@ public class FileImportController_ms extends HttpServlet {
 			  // first things first, setup connection to DB
 			  //
 			  //Cluster cluster = Cluster.builder().addContactPoint("127.0.0.1").build();
-			  Session session =  FileAPI_ms.cluster.connect();
+			  FileAPI.DBConnect();
+			  Session session =  FileAPI.cluster.connect();
 			  session.execute("USE testapp");
 			  
 			  String stquery = "SELECT *  FROM files WHERE ";
@@ -127,14 +128,14 @@ public class FileImportController_ms extends HttpServlet {
 				  // //////////////////////////////////////////////////////
 				  // Batch
 			      // //////////////////////////////////////////////////////
-				  r2lib.SendEvent("http://R2stestapp-env.eba-txcmd3gh.us-east-2.elasticbeanstalk.com/BatchController_ms.html", serviceparam);
+				  r2lib.SendEvent(FileAPI.FILEAPPURL + "/BatchController_ms.html", serviceparam);
 			  }
 			  else if (Authenticate.equals("Transaction") )
 			  {
 			      // //////////////////////////////////////////////////////
 				  // Transaction
 			      // //////////////////////////////////////////////////////
-				  r2lib.SendEvent("http://R2stestapp-env.eba-txcmd3gh.us-east-2.elasticbeanstalk.com/TransactionController_ms.html", serviceparam);
+				  r2lib.SendEvent(FileAPI.FILEAPPURL + "/TransactionController_ms.html", serviceparam);
 			  }
 			  
 		   	

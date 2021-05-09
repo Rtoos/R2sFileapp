@@ -32,7 +32,6 @@ import software.aws.mcs.auth.SigV4AuthProvider;
 @WebServlet("/FileAPI_ms")
 public class FileAPI_ms extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	public static Cluster cluster;
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -44,13 +43,6 @@ public class FileAPI_ms extends HttpServlet {
 
     public void init(ServletConfig config) throws ServletException {
 	  	  //FileAPI_ms.cluster  = Cluster.builder().addContactPoint("127.0.0.1").build();
-    	FileAPI_ms.cluster = Cluster.builder()
-				.addContactPoint("cassandra.us-east-2.amazonaws.com")
-				.withPort(9142)
-				.withAuthProvider(new SigV4AuthProvider("us-east-2"))
-                .withSSL()
-				.withCredentials("rtoos-at-061466880193", "cNG6qoaLFn8w+6GYDhehcKWektKA5NKTA5SNVj4JgMg=")
-				.build();
     }
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
@@ -90,7 +82,8 @@ public class FileAPI_ms extends HttpServlet {
 			  
 			  // data coming in in filename
 			  // put to file (in cassandra)
-				  Session session =  FileAPI_ms.cluster.connect();
+			  FileAPI.DBConnect();
+			  Session session =  FileAPI.cluster.connect();
 				  session.execute("USE testapp");
 				  
 			      Statement  st2 = new SimpleStatement("INSERT INTO files (file_id, file) VALUES (?, ?);", 
@@ -114,7 +107,7 @@ public class FileAPI_ms extends HttpServlet {
 			    jsonObject.put("rootid", rootid);
 			  // get the value
 			  //  CountDownLatch countDownLatch = new CountDownLatch(1);
-			  r2lib.SendEvent( "http://R2stestapp-env.eba-txcmd3gh.us-east-2.elasticbeanstalk.com/FileImportController_ms.html", jsonObject.toString() );
+			  r2lib.SendEvent( FileAPI.FILEAPPURL + "/FileImportController_ms.html", jsonObject.toString() );
 		    //  try {
 			//	countDownLatch.await();
 		   //   } catch (InterruptedException e) {
@@ -130,7 +123,8 @@ public class FileAPI_ms extends HttpServlet {
 			  String fileid = rootid;
 			  
 			  //cluster = Cluster.builder().addContactPoint("127.0.0.1").build();
-			  session = FileAPI_ms.cluster.connect();
+			  FileAPI.DBConnect();
+			  session =  FileAPI.cluster.connect();
 			  session.execute("USE testapp");
 			    String stquery = "UPDATE tests SET endtime  = ";
 			    stquery += timeMilli2;

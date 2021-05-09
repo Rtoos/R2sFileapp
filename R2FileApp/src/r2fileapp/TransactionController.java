@@ -91,7 +91,8 @@ public class TransactionController extends HttpServlet {
 			  // first things first, setup connection to DB
 			  //
 			  //Cluster cluster = Cluster.builder().addContactPoint("127.0.0.1").build();
-			  Session session = FileAPI.cluster.connect();
+			  FileAPI.DBConnect();
+			  Session session =  FileAPI.cluster.connect();
 			  session.execute("USE testapp");
 			  //
 			  // get all the transactions for the file
@@ -116,7 +117,7 @@ public class TransactionController extends HttpServlet {
 				  
 				  //
 				  // create the bulkclear service
-				  r2lib.R2s_Subsequent("http://R2stestapp-env.eba-txcmd3gh.us-east-2.elasticbeanstalk.com/ClearBulk.html", "Clear Bulk");
+				  r2lib.R2s_Subsequent(FileAPI.FILEAPPURL + "/ClearBulk.html", "Clear Bulk");
 			      //System.out.println(BulkClear);
 				  					  
 			      for (int i = 0; i < all.size(); i++)
@@ -126,7 +127,7 @@ public class TransactionController extends HttpServlet {
 				      //
 				      // create the authenticate service
 				      //
-				      r2lib.R2s_Contained(serviceid, "http://R2stestapp-env.eba-txcmd3gh.us-east-2.elasticbeanstalk.com/AuthTransaction.html", "Authenticate Transaction", 3, 6000, 6000);
+				      r2lib.R2s_Contained(serviceid, FileAPI.FILEAPPURL + "/AuthTransaction.html", "Authenticate Transaction", 3, 6000, 6000);
 			      }    
 			  }
 			  else if (Clearing.equals("Individual") )
@@ -141,9 +142,9 @@ public class TransactionController extends HttpServlet {
 				      
 				      //
 				      // create the authenticate service
-				      String transactionid = r2lib.R2s_Subsequent(serviceid, "http://R2stestapp-env.eba-txcmd3gh.us-east-2.elasticbeanstalk.com/AuthTransaction.html", "Authenticate Transaction");					  
+				      String transactionid = r2lib.R2s_Subsequent(serviceid, FileAPI.FILEAPPURL + "/AuthTransaction.html", "Authenticate Transaction");					  
 				      // create the clear individual service
-				      String clearid = r2lib.R2s_Independent("http://R2stestapp-env.eba-txcmd3gh.us-east-2.elasticbeanstalk.com/ClearIndividual.html", serviceid);
+				      String clearid = r2lib.R2s_Independent(FileAPI.FILEAPPURL + "/ClearIndividual.html", serviceid);
 				      // set transaction as predecessor to clear
 				      r2lib.R2s_Setpredecessor(transactionid, clearid);
 			      }    

@@ -83,13 +83,14 @@ public class BatchController extends HttpServlet {
 			  // create the EvaluateBatch service
 			  // as subsequent
 			  //
-			 r2lib.R2s_Subsequent("http://R2stestapp-env.eba-txcmd3gh.us-east-2.elasticbeanstalk.com/EvaluateBatch.html", serviceparam);
+			 r2lib.R2s_Subsequent(FileAPI.FILEAPPURL + "/EvaluateBatch.html", serviceparam);
 			  
 			  //
 			  // first things first, setup connection to DB
 			  //
 			  //Cluster cluster = Cluster.builder().addContactPoint("127.0.0.1").build();
-			  Session session = FileAPI.cluster.connect();
+			  FileAPI.DBConnect();
+			  Session session =  FileAPI.cluster.connect();
 			  session.execute("USE testapp");
 			  
 			  //
@@ -114,7 +115,7 @@ public class BatchController extends HttpServlet {
 			      // create the authenticate service
 			      // as contained
 			      //
-			      r2lib.R2s_Contained(transactionid, "http://R2stestapp-env.eba-txcmd3gh.us-east-2.elasticbeanstalk.com/AuthTransaction.html", "Authenticate Transaction");
+			      r2lib.R2s_Contained(transactionid, FileAPI.FILEAPPURL + "/AuthTransaction.html", "Authenticate Transaction");
 				  
 		      }    
 

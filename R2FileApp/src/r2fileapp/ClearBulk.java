@@ -77,7 +77,8 @@ public class ClearBulk extends HttpServlet {
 
 			  // first things first, store the transactions in DB
 			  //Cluster cluster = Cluster.builder().addContactPoint("127.0.0.1").build();
-			  Session session = FileAPI.cluster.connect();
+			  FileAPI.DBConnect();
+			  Session session =  FileAPI.cluster.connect();
 			  session.execute("USE testapp");
 
 			  String stquery = "SELECT *  FROM transactions WHERE ";

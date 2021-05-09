@@ -77,6 +77,7 @@ public class AuthTransaction extends HttpServlet {
 		      
 			  // first things first, store the transactions in DB
 			  //Cluster cluster = Cluster.builder().addContactPoint("127.0.0.1").build();
+			  FileAPI.DBConnect();
 			  Session session =  FileAPI.cluster.connect();
 			  session.execute("USE testapp");
 

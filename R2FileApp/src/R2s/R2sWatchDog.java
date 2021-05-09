@@ -9,7 +9,7 @@ public class R2sWatchDog implements Runnable
 {
 	private Thread t;
 	private JSONObject myrow;
-	private Semaphore mysemaphore; 
+	private Semaphore mysemaphore;
 
 	R2sWatchDog (JSONObject row, Semaphore semaphore)
 	{

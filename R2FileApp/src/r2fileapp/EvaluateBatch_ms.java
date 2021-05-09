@@ -79,7 +79,8 @@ public class EvaluateBatch_ms extends HttpServlet {
 			  // first things first, setup connection to DB
 			  //
 			  //Cluster cluster = Cluster.builder().addContactPoint("127.0.0.1").build();
-			  Session session =  FileAPI_ms.cluster.connect();
+			  FileAPI.DBConnect();
+			  Session session =  FileAPI.cluster.connect();
 			  session.execute("USE testapp");
 
 			  //
@@ -120,7 +121,7 @@ public class EvaluateBatch_ms extends HttpServlet {
 				  {
 					  
 					  // create the bulkclear service
-					  r2lib.SendEvent("http://R2stestapp-env.eba-txcmd3gh.us-east-2.elasticbeanstalk.com/ClearBulk_ms.html", fileid);						
+					  r2lib.SendEvent(FileAPI.FILEAPPURL + "/ClearBulk_ms.html", fileid);						
 				  }
 			      // //////////////////////////////////////////////////////
 				  // Individual
@@ -132,7 +133,7 @@ public class EvaluateBatch_ms extends HttpServlet {
 				    	 // create the Individual clear service
 					      String transaction_id = all.get(ii).getUUID("transaction_id").toString();	
 					      String parm = fileid + '=' + transaction_id;
-					      r2lib.SendEvent("http://R2stestapp-env.eba-txcmd3gh.us-east-2.elasticbeanstalk.com/ClearIndividual_ms.html", parm);						
+					      r2lib.SendEvent(FileAPI.FILEAPPURL + "/ClearIndividual_ms.html", parm);						
 				      }    
 				  }
 				  

@@ -92,14 +92,15 @@ public class FileImportController extends HttpServlet {
 		      // //////////////////////////////////////////////////////
 			  //r2lib.R2s_Error("http://localhost:8080/R2FileApp/OnError.html?callback=" + rootid, "R2_Error");
 			  //r2lib.R2s_Final("http://localhost:8080/R2FileApp/Finally.html?callback=" + rootid, "R2_Final");
-			  r2lib.R2s_Error("http://R2stestapp-env.eba-txcmd3gh.us-east-2.elasticbeanstalk.com/OnError.html" , "R2_Error");
-			  r2lib.R2s_Final("http://R2stestapp-env.eba-txcmd3gh.us-east-2.elasticbeanstalk.com/Finally.html" , "R2_Final");
+			  r2lib.R2s_Error(FileAPI.FILEAPPURL + "/OnError.html" , "R2_Error");
+			  r2lib.R2s_Final(FileAPI.FILEAPPURL + "/Finally.html" , "R2_Final");
 //			  r2lib.R2_Final("http://127.0.0.1:46666/callback?id=" + rootid, "R2_Final");
 			  //
 			  // first things first, setup connection to DB
 			  //
 			  //Cluster cluster = Cluster.builder().addContactPoint("127.0.0.1").build();
-			  Session session = FileAPI.cluster.connect();
+			  FileAPI.DBConnect();
+			  Session session =  FileAPI.cluster.connect();
 			  session.execute("USE testapp");
 
 			  String stquery = "SELECT *  FROM files WHERE ";
@@ -131,14 +132,14 @@ public class FileImportController extends HttpServlet {
 				  // //////////////////////////////////////////////////////
 				  // Batch
 			      // //////////////////////////////////////////////////////
-				  r2lib.R2s_Subsequent("http://R2stestapp-env.eba-txcmd3gh.us-east-2.elasticbeanstalk.com/BatchController.html", serviceparam);
+				  r2lib.R2s_Subsequent(FileAPI.FILEAPPURL + "/BatchController.html", serviceparam);
 			  }
 			  else if (Authenticate.equals("Transaction") )
 			  {
 			      // //////////////////////////////////////////////////////
 				  // Transaction
 			      // //////////////////////////////////////////////////////
-				  r2lib.R2s_Subsequent("http://R2stestapp-env.eba-txcmd3gh.us-east-2.elasticbeanstalk.com/TransactionController.html", serviceparam);
+				  r2lib.R2s_Subsequent(FileAPI.FILEAPPURL + "/TransactionController.html", serviceparam);
 			  }
 			  
 		   	

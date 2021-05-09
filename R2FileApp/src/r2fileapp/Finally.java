@@ -71,7 +71,8 @@ public class Finally extends HttpServlet {
 			  String fileid = r2lib.R2s_GetRootID();
 			  
 			  //Cluster cluster = Cluster.builder().addContactPoint("127.0.0.1").build();
-			  Session session = FileAPI.cluster.connect();
+			  FileAPI.DBConnect();
+			  Session session =  FileAPI.cluster.connect();
 			  session.execute("USE testapp");
 			    String stquery = "UPDATE tests SET endtime  = ";
 			    stquery += timeMilli;

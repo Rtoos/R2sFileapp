@@ -25,10 +25,11 @@ public class R2sLib {
 
 	private JSONArray r2regarray = new JSONArray();
 	private JSONObject r2json = null;
+	private int R2s_BATCHSIZE = 25;
 	private int R2s_TIMEOUT = 6000;
 	private int R2s_TIMEOUT_WAIT = 3000;
 	private int R2s_TRIES = 3;
-	private String R2s_URL = "http://R2s-env.eba-brapaztr.us-east-2.elasticbeanstalk.com/R2s.html";
+	private String R2s_URL = "http://R2sserver-env.eba-jzwtmsgx.us-east-2.elasticbeanstalk.com/R2s.html";
 	//private String R2s_URL = "http://R2stestapp-env.eba-txcmd3gh.us-east-2.elasticbeanstalk.com/R2sFA.html";
 	
 	/**
@@ -79,6 +80,7 @@ public class R2sLib {
 				R2s_TIMEOUT_WAIT = r2sconifg.getInt("R2s_TIMEOUT_WAIT");
 				R2s_TRIES = r2sconifg.getInt("R2s_TRIES");
 				R2s_URL = r2sconifg.getString("R2s_URL");
+				R2s_BATCHSIZE = r2sconifg.getInt("R2s_BATCHSIZE");
 			} 
 		catch (IOException e) {
 		      System.out.println(e.toString());
@@ -1006,14 +1008,54 @@ public class R2sLib {
 	public String R2s_Release() throws IOException
 	{
 		R2s_IsValidJson(); 
+		String resp = "";
+		/*
+		String resp = "";
 		  try 
 		  {
+			  JSONArray temparray = new JSONArray();
+			  for (int i = 0; i < r2regarray.length(); i++) {
+	    		  JSONObject jsonrtoos = r2regarray.getJSONObject(i);
+			      //System.out.println(jsonrtoos);
+	    		  temparray.put(jsonrtoos);
+	    		  if (temparray.length() ==  R2s_BATCHSIZE) {
+	    			  JSONObject newrequest = new JSONObject();
+	    			  newrequest.put("r2_msg", temparray);
+	    			  newrequest.put("type", "Batch");
+	    			  newrequest.put("root_service", r2json.getString("root_service"));
+	    			  newrequest.put("service", r2json.getString("service"));
+	    			  resp += SendEvent(newrequest.toString());	  
+	    			  temparray = new JSONArray();	    			  
+	    		  }
+	    	  }
+    		  if (temparray.length() > 0) {
+    			  JSONObject newrequest = new JSONObject();
+    			  newrequest.put("r2_msg", temparray);
+    			  newrequest.put("type", "Batch");
+    			  newrequest.put("root_service", r2json.getString("root_service"));
+    			  newrequest.put("service", r2json.getString("service"));
+    			  resp += SendEvent(newrequest.toString());	  
+    		  }
+			  
+			  r2regarray = new JSONArray();
+			  return resp.toString();
+
+		  } 
+		  catch (JSONException  e) 
+		  {
+			  throw new IOException(r2json.toString());
+		  }
+		  */
+		  try 
+		  {
+			      //System.out.println(jsonrtoos);
 			  JSONObject newrequest = new JSONObject();
 			  newrequest.put("r2_msg", r2regarray);
 			  newrequest.put("type", "Batch");
 			  newrequest.put("root_service", r2json.getString("root_service"));
 			  newrequest.put("service", r2json.getString("service"));
-			  String resp = SendEvent(newrequest.toString());	  
+			  resp += SendEvent(newrequest.toString());	  
+			  
 			  r2regarray = new JSONArray();
 			  return resp.toString();
 

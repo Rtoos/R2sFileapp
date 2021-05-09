@@ -88,7 +88,8 @@ public class TransactionController_ms extends HttpServlet {
 			  // first things first, setup connection to DB
 			  //
 			  //Cluster cluster = Cluster.builder().addContactPoint("127.0.0.1").build();
-			  Session session =  FileAPI_ms.cluster.connect();
+			  FileAPI.DBConnect();
+			  Session session =  FileAPI.cluster.connect();
 			  session.execute("USE testapp");
 			  //
 			  // get all the transactions for the file
@@ -121,10 +122,10 @@ public class TransactionController_ms extends HttpServlet {
 				      // create the authenticate service
 				      //
 				      String parm = fileid + '=' + serviceid;
-				      r2lib.SendEvent( "http://R2stestapp-env.eba-txcmd3gh.us-east-2.elasticbeanstalk.com/AuthTransaction_ms.html", parm);
+				      r2lib.SendEvent( FileAPI.FILEAPPURL + "/AuthTransaction_ms.html", parm);
 			      }    
 				  // create the bulkclear service
-				  r2lib.SendEvent("http://R2stestapp-env.eba-txcmd3gh.us-east-2.elasticbeanstalk.com/ClearBulk_ms.html", fileid);
+				  r2lib.SendEvent(FileAPI.FILEAPPURL + "/ClearBulk_ms.html", fileid);
 			      //System.out.println(BulkClear);
 			  }
 			  else if (Clearing.equals("Individual") )
@@ -144,8 +145,8 @@ public class TransactionController_ms extends HttpServlet {
 				      //
 				      // create the authenticate service
 				      String parm = fileid + '=' + serviceid;
-				      r2lib.SendEvent("http://R2stestapp-env.eba-txcmd3gh.us-east-2.elasticbeanstalk.com/AuthTransaction_ms.html", parm);					  
-				      r2lib.SendEvent("http://R2stestapp-env.eba-txcmd3gh.us-east-2.elasticbeanstalk.com/ClearIndividual_ms.html", parm);
+				      r2lib.SendEvent(FileAPI.FILEAPPURL + "/AuthTransaction_ms.html", parm);					  
+				      r2lib.SendEvent(FileAPI.FILEAPPURL + "/ClearIndividual_ms.html", parm);
 			      }    
 			  }
 			  else if (Clearing.equals("IndividualA") )
@@ -166,7 +167,7 @@ public class TransactionController_ms extends HttpServlet {
 				      //
 				      // create the authenticate service
 				      String parm = fileid + '=' + serviceid;
-				      r2lib.SendEventA("http://R2stestapp-env.eba-txcmd3gh.us-east-2.elasticbeanstalk.com/AuthTransaction_ms.html", parm, countDownLatch);					  
+				      r2lib.SendEventA(FileAPI.FILEAPPURL + "/AuthTransaction_ms.html", parm, countDownLatch);					  
 			      }    
 			      try {
 						countDownLatch.await();
@@ -183,7 +184,7 @@ public class TransactionController_ms extends HttpServlet {
 				      //
 				      // create the authenticate service
 				      String parm = fileid + '=' + serviceid;
-				      r2lib.SendEventA("http://R2stestapp-env.eba-txcmd3gh.us-east-2.elasticbeanstalk.com/ClearIndividual_ms.html", parm, countDownLatch2);
+				      r2lib.SendEventA(FileAPI.FILEAPPURL + "/ClearIndividual_ms.html", parm, countDownLatch2);
 			      }    
 			      try {
 						countDownLatch2.await();

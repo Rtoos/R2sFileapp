@@ -85,7 +85,8 @@ public class BatchController_ms extends HttpServlet {
 			  // first things first, setup connection to DB
 			  //
 			  //Cluster cluster = Cluster.builder().addContactPoint("127.0.0.1").build();
-			  Session session =  FileAPI_ms.cluster.connect();
+			  FileAPI.DBConnect();
+			  Session session =  FileAPI.cluster.connect();
 			  session.execute("USE testapp");
 			  
 			  //
@@ -111,14 +112,14 @@ public class BatchController_ms extends HttpServlet {
 			      // as contained
 			      //
 			      String parm = fileid + '=' + transactionid;
-			      r2lib.SendEvent("http://R2stestapp-env.eba-txcmd3gh.us-east-2.elasticbeanstalk.com/AuthTransaction_ms.html", parm);
+			      r2lib.SendEvent(FileAPI.FILEAPPURL + "/AuthTransaction_ms.html", parm);
 				  
 		      }    
 			  //
 			  // create the EvaluateBatch service
 			  // as subsequent
 			  //
-			 r2lib.SendEvent("http://R2stestapp-env.eba-txcmd3gh.us-east-2.elasticbeanstalk.com/EvaluateBatch_ms.html", serviceparam);
+			 r2lib.SendEvent(FileAPI.FILEAPPURL + "/EvaluateBatch_ms.html", serviceparam);
 
 			  
 			  
