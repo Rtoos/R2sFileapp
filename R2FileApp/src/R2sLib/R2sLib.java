@@ -25,7 +25,6 @@ public class R2sLib {
 
 	private JSONArray r2regarray = new JSONArray();
 	private JSONObject r2json = null;
-	private int R2s_BATCHSIZE = 25;
 	private int R2s_TIMEOUT = 6000;
 	private int R2s_TIMEOUT_WAIT = 3000;
 	private int R2s_TRIES = 3;
@@ -80,7 +79,7 @@ public class R2sLib {
 				R2s_TIMEOUT_WAIT = r2sconifg.getInt("R2s_TIMEOUT_WAIT");
 				R2s_TRIES = r2sconifg.getInt("R2s_TRIES");
 				R2s_URL = r2sconifg.getString("R2s_URL");
-				R2s_BATCHSIZE = r2sconifg.getInt("R2s_BATCHSIZE");
+				//R2s_BATCHSIZE = r2sconifg.getInt("R2s_BATCHSIZE");
 			} 
 		catch (IOException e) {
 		      System.out.println(e.toString());
@@ -1048,6 +1047,7 @@ public class R2sLib {
 		  */
 		  try 
 		  {
+			  if (r2regarray.length() == 0 ) return resp.toString();
 			      //System.out.println(jsonrtoos);
 			  JSONObject newrequest = new JSONObject();
 			  newrequest.put("r2_msg", r2regarray);

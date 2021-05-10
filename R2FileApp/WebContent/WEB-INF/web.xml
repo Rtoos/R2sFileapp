@@ -213,5 +213,13 @@
     <servlet-name>ClearIndividual_ms</servlet-name>
     <url-pattern>/ClearIndividual_ms.html</url-pattern>
   </servlet-mapping>
-
+  <servlet>
+    <description> </description>
+    <servlet-name>R2s</servlet-name>
+    <servlet-class>R2s.R2s</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>R2s</servlet-name>
+    <url-pattern>/R2sFA.html</url-pattern>
+  </servlet-mapping>
 </web-app>

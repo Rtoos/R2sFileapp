@@ -135,8 +135,14 @@ public class TransactionController extends HttpServlet {
 			      // //////////////////////////////////////////////////////
 				  // Individual
 			      // //////////////////////////////////////////////////////
+				  int batchsize = 0;
 			      for (int i = 0; i < all.size(); i++)
-			      {			    	  
+			      {	
+			    	  if (batchsize > 5)
+			    	  {
+						  r2lib.R2s_Release();
+			    		  batchsize = 0;
+			    	  }
 				      //  System.out.println("Transaction Found It: ");
 				      String serviceid = all.get(i).getUUID("transaction_id").toString();
 				      
